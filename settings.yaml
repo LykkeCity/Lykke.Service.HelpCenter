@@ -1,0 +1,32 @@
+HelpCenterService:
+    Db:
+        LogsConnString:
+            settings-key: "HelpCenterService-LogsConnString"
+            types:
+                - AzureBlobStorage
+                - Tag
+ 
+    ZenDesk: 
+        Url:
+            settings-key: "HelpCenterService-ZenDeskUrl",
+        Email:
+            settings-key: "HelpCenterService-ZenDeskEmail",
+        ApiKey:
+            settings-key: "HelpCenterService-ZenDeskApiKey"
+
+ ClientAccountServiceClient:
+    ServiceUrl:
+        settings-key: ClientAccountServiceUrl       
+          
+MonitoringServiceClient:
+    MonitoringServiceUrl:
+        settings-key: MonitoringServiceUrl       
+
+SlackNotifications:
+    AzureQueue:
+        ConnectionString:
+            settings-key: SlackNotificationsConnString
+            types:
+                - AzureTableStorage
+        QueueName: 
+            settings-key: SlackQueueName
