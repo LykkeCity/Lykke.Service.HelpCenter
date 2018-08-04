@@ -14,8 +14,8 @@ HelpCenterService:
 
         ClientsCacheInstance:
             settings-key: HelpCenterService-ClientsCache
-        ClientsCacheInstance:
-            settings-key: HelpCenterService-ClientsCacheKey
+        ClientsCacheKeyPattern:
+            settings-key: HelpCenterService-ClientsCacheKeyPattern
 
     ZenDesk: 
         Url:
