@@ -6,7 +6,6 @@ namespace Lykke.Service.HelpCenter.Core.Settings
     {
         [HttpCheck("")]
         public string Url { get; set; }
-        public string Email { get; set; }
-        public string ApiKey { get; set; }
+        public string OAuthToken { get; set; }
     }
 }

@@ -11,6 +11,7 @@ namespace Lykke.Service.HelpCenter.Controllers
     /// <summary>
     /// HelpCenter requests controller.
     /// </summary>
+    /// <inheritdoc />
     [Route("api/[controller]")]
     public class RequestsController : Controller
     {
@@ -57,35 +58,6 @@ namespace Lykke.Service.HelpCenter.Controllers
                 GetRequestType(model.Type));
 
             return Ok(result);
-        }
-
-        /// <summary>
-        /// Adds a comment to an existing ticket.
-        /// </summary>
-        /// <param name="id">The ticket id</param>
-        /// <param name="model">The comment to add</param>
-        /// <response code="200">When comment was successfully added</response>
-        /// <response code="400">One or more parameters are invalid</response>
-        /// <response code="404">Request could not be found</response>
-        [HttpPut("{id}")]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> AddComment(string id, [FromBody] AddCommentModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return new BadRequestObjectResult(ModelState);
-            }
-
-            var result = await _requests.UpdateRequest(id, model.Comment);
-
-            if (result == null)
-            {
-                return NotFound("Request could not be found");
-            }
-
-            return Ok();
         }
 
         /// <summary>
@@ -141,6 +113,41 @@ namespace Lykke.Service.HelpCenter.Controllers
 
             var result = await _requests.GetRequests(client);
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Adds a comment to an existing request.
+        /// </summary>
+        /// <param name="id">The request id</param>
+        /// <param name="model">The comment to add</param>
+        /// <response code="200">When comment was successfully added</response>
+        /// <response code="400">One or more parameters are invalid</response>
+        /// <response code="404">Request or client could not be found</response>
+        [HttpPost("{id}/comments")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> AddComment(string id, [FromBody] AddCommentModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestObjectResult(ModelState);
+            }
+
+            var client = await _clientAccounts.FindClient(model.ClientId);
+            if (client == null)
+            {
+                return NotFound("Client could not be found.");
+            }
+
+            var result = await _requests.UpdateRequest(client, id, model.Comment);
+
+            if (result == null)
+            {
+                return NotFound("Request could not be found");
+            }
+
+            return Ok();
         }
 
         /// <summary>

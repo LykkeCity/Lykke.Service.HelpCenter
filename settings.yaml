@@ -5,14 +5,23 @@ HelpCenterService:
             types:
                 - AzureBlobStorage
                 - Tag
- 
+    
+    Cache:
+        RedisConfiguration:
+            settings-key: HelpCenterService-RedisConfiguration
+            types:
+                - Redis
+
+        ClientsCacheInstance:
+            settings-key: HelpCenterService-ClientsCache
+        ClientsCacheInstance:
+            settings-key: HelpCenterService-ClientsCacheKey
+
     ZenDesk: 
         Url:
             settings-key: HelpCenterService-ZenDeskUrl
-        Email:
-            settings-key: HelpCenterService-ZenDeskEmail
-        ApiKey:
-            settings-key: HelpCenterService-ZenDeskApiKey
+        OAuthToken:
+            settings-key: HelpCenterService-OAuthToken
 
 ClientAccountServiceClient:
     ServiceUrl:

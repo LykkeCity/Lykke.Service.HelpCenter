@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Lykke.HttpClientGenerator" Version="2.1.0" />
-    <PackageReference Include="Lykke.Service.ClientAccount.Client" Version="2.2.0" />
+    <PackageReference Include="Lykke.Service.ClientAccount.Client" Version="2.2.2" />
     <PackageReference Include="Refit" Version="4.6.30" />
   </ItemGroup>
 

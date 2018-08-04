@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Lykke.Service.HelpCenter.Core.Settings;
@@ -12,11 +11,8 @@ namespace Lykke.Service.HelpCenter.Services.ZenDesk
 
         public ZenDeskAuthentication(ZenDeskSettings settings)
         {
-            _authHeader = "Basic " + EncodeTo64($"{settings.Email}/token:{settings.ApiKey}");
+            _authHeader = $"Bearer {settings.OAuthToken}";
         }
-
-        private static string EncodeTo64(string toEncode)
-            => Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(toEncode));
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {

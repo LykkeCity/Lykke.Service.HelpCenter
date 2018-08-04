@@ -40,7 +40,7 @@ namespace Lykke.Service.HelpCenter.Services.Services
 
             try
             {
-                var result = await _requests.PlaceRequest(request);
+                var result = await _requests.PlaceRequest(client.Email, request);
                 return result.Request.Id;
             }
             catch (Exception ex)
@@ -83,7 +83,7 @@ namespace Lykke.Service.HelpCenter.Services.Services
             }
         }
 
-        public async Task<RequestModel> UpdateRequest(string id, string comment)
+        public async Task<RequestModel> UpdateRequest(ClientModel client, string id, string comment)
         {
             var request = new UpdateRequestModel
             {
@@ -95,7 +95,7 @@ namespace Lykke.Service.HelpCenter.Services.Services
             
             try
             {
-                var result = await _requests.UpdateRequest(id, request);
+                var result = await _requests.UpdateRequest(client.Email, id, request);
                 return result.Request;
             }
             catch (ApiException ex)

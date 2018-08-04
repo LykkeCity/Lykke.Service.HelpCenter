@@ -10,7 +10,7 @@ namespace Lykke.Service.HelpCenter.Services.ZenDesk
     internal interface IRequestsApi
     {
         [Post("/api/v2/requests.json")]
-        Task<RequestResponseModel> PlaceRequest([Body] CreateRequestModel toAdd);
+        Task<RequestResponseModel> PlaceRequest([OnBehalveOfHeader] string email, [Body] CreateRequestModel toAdd);
 
         [Get("/api/v2/requests/{id}.json")]
         Task<RequestResponseModel> GetRequest([Query] string id);
@@ -19,7 +19,8 @@ namespace Lykke.Service.HelpCenter.Services.ZenDesk
         Task<RequestsResponseModel> GetRequests([Query] string email);
 
         [Put("/api/v2/requests/{id}.json")]
-        Task<RequestResponseModel> UpdateRequest([Query] string id, [Body] UpdateRequestModel request);
+        Task<RequestResponseModel> UpdateRequest([OnBehalveOfHeader] string email, [Query] string id,
+            [Body] UpdateRequestModel request);
 
         [Get("/api/v2/requests/{id}/comments.json")]
         Task<CommentsResponseModel> GetComments([Query] string id);

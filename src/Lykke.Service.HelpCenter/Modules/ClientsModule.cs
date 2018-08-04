@@ -18,7 +18,9 @@ namespace Lykke.Service.HelpCenter.Modules
 
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterLykkeServiceClient(_settings.CurrentValue.ClientAccountServiceClient.ServiceUrl);
+            var settings = _settings.CurrentValue;
+
+            builder.RegisterLykkeServiceClient(settings.ClientAccountServiceClient.ServiceUrl);
         }
     }
 }

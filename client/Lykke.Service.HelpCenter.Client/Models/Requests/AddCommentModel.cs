@@ -10,6 +10,12 @@ namespace Lykke.Service.HelpCenter.Client.Models.Requests
     public class AddCommentModel
     {
         /// <summary>
+        /// The id of the client that adds a comment to the request.
+        /// </summary>
+        [Required]
+        public string ClientId { get; set; }
+
+        /// <summary>
         /// The comment text.
         /// </summary>
         [Required]
