@@ -10,17 +10,6 @@ HelpCenterService:
             types:
                 - AzureTableStorage
     
-    Cache:
-        RedisConfiguration:
-            settings-key: HelpCenter-RedisConfiguration
-            types:
-                - Redis
-
-        ClientsCacheInstance:
-            settings-key: HelpCenter-ClientsCache
-        ClientsCacheKeyPattern:
-            settings-key: HelpCenter-ClientsCacheKeyPattern
-
     ZenDesk: 
         Url:
             settings-key: HelpCenter-ZenDeskUrl
