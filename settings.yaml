@@ -22,7 +22,7 @@ ClientAccountServiceClient:
           
 MonitoringServiceClient:
     MonitoringServiceUrl:
-        settings-key: MonitoringServiceUrl       
+        settings-key: MonitoringServiceUrl
 
 SlackNotifications:
     AzureQueue:

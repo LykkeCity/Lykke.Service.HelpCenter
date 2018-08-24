@@ -34,7 +34,7 @@ namespace Lykke.Service.HelpCenter.Services.Services
                     Subject = subject,
                     Type = type,
                     Requester = new RequesterModel { Email = client.Email, Name = client.Name },
-                    Comment = new CommentModel { Body = description }
+                    Comment = new ZenDeskCommentModel() { Body = description }
                 }
             };
 
@@ -96,7 +96,7 @@ namespace Lykke.Service.HelpCenter.Services.Services
             {
                 Request = new UpdateRequestModel.Details
                 {
-                    Comment = new CommentModel { Body = comment }
+                    Comment = new ZenDeskCommentModel { Body = comment }
                 }
             };
 
@@ -118,13 +118,17 @@ namespace Lykke.Service.HelpCenter.Services.Services
             }
         }
 
-        public async Task<IEnumerable<string>> GetComments(string id)
+        public async Task<IEnumerable<CommentModel>> GetComments(string id)
         {
             try
             {
                 var result = await _requests.GetComments(id);
-
-                return result.Comments.Select(x => x.Body);
+                
+                return result.Comments.Select(x => new CommentModel
+                {
+                    Text = x.Body,
+                    Author = result.Authors.FirstOrDefault(a => a.Id == x.AuthorId)?.Name ?? x.AuthorId
+                });
             }
             catch (ApiException ex)
             {

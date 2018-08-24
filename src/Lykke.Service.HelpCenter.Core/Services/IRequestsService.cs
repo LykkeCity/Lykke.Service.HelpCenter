@@ -15,6 +15,6 @@ namespace Lykke.Service.HelpCenter.Core.Services
 
         Task<RequestModel> UpdateRequest(ClientModel client, string id, string comment);
 
-        Task<IEnumerable<string>> GetComments(string id);
+        Task<IEnumerable<CommentModel>> GetComments(string id);
     }
 }

@@ -10,7 +10,7 @@ namespace Lykke.Service.HelpCenter.Services.ZenDesk.Requests
         public class Details
         {
             [JsonProperty("comment")]
-            public CommentModel Comment { get; set; }
+            public ZenDeskCommentModel Comment { get; set; }
         }
     }
 }

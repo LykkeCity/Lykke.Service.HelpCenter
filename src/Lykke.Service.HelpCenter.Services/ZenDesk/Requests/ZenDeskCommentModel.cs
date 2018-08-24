@@ -2,7 +2,7 @@
 
 namespace Lykke.Service.HelpCenter.Services.ZenDesk.Requests
 {
-    internal class CommentModel
+    internal class ZenDeskCommentModel
     {
         [JsonProperty("body")]
         public string Body { get; set; }

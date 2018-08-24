@@ -165,7 +165,11 @@ namespace Lykke.Service.HelpCenter.Controllers
                 return NotFound("Request could not be found");
             }
 
-            return Ok(result.Select(x => new CommentModel { Text = x }));
+            return Ok(result.Select(x => new CommentModel
+            {
+                Text = x.Text,
+                Author = x.Author
+            }));
         }
 
         private static Core.Domain.Requests.RequestType GetRequestType(RequestType? modelType)

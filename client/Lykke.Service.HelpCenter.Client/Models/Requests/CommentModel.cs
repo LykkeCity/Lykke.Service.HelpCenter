@@ -8,9 +8,10 @@ namespace Lykke.Service.HelpCenter.Client.Models.Requests
     [PublicAPI]
     public class CommentModel
     {
-        /// <summary>
-        /// The comment text.
-        /// </summary>
+        /// <summary>The comment text</summary>
         public string Text { get; set; }
+
+        /// <summary>The comment author</summary>
+        public string Author { get; set; }
     }
 }
