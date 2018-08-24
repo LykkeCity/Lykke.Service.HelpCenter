@@ -22,7 +22,7 @@ namespace Lykke.Service.HelpCenter.Client
     /// Extension methods for <see cref="IHelpCenterApi"/>.
     /// </summary>
     [PublicAPI]
-    public static class HftApiExtensions
+    public static class HelpCenterApiExtensions
     {
         /// <summary>
         /// Determines whether this help center service is alive.

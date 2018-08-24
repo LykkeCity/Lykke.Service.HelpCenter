@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 
 namespace Lykke.Service.HelpCenter.Services.ZenDesk.Requests
 {
-    internal class RequestsResponseModel
+    internal class SearchRequestsResponseModel
     {
-        [JsonProperty("requests")]
+        [JsonProperty("results")]
         public IReadOnlyList<RequestModel> Requests { get; set; }
     }
 }

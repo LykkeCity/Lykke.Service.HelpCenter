@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace Lykke.Service.HelpCenter.Core.Domain.Requests
 {
@@ -16,5 +17,8 @@ namespace Lykke.Service.HelpCenter.Core.Domain.Requests
         public RequestType? Type { get; set; }
 
         public RequestPriority? Priority { get; set; }
+
+        [JsonProperty("requester_id")]
+        public string RequesterId { get; set; }
     }
 }

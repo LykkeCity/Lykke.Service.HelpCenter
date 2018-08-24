@@ -13,15 +13,16 @@ namespace Lykke.Service.HelpCenter.Controllers
     /// </summary>
     /// <inheritdoc />
     [Route("api/[controller]")]
+    [ApiController]
     public class RequestsController : Controller
     {
-        private readonly IClientAcountService _clientAccounts;
+        private readonly ISupportClientsService _clientAccounts;
         private readonly IRequestsService _requests;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RequestsController"/> class.
         /// </summary>
-        public RequestsController(IClientAcountService clientAccounts, IRequestsService requests)
+        public RequestsController(ISupportClientsService clientAccounts, IRequestsService requests)
         {
             _clientAccounts = clientAccounts;
             _requests = requests;
@@ -40,12 +41,17 @@ namespace Lykke.Service.HelpCenter.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> PlaceRequest([FromBody] PlaceRequestModel model)
         {
-            if (!ModelState.IsValid)
+            if (string.IsNullOrWhiteSpace(model.Subject))
             {
-                return new BadRequestObjectResult(ModelState);
+                return BadRequest("Subject is mandatory");
             }
 
-            var client = await _clientAccounts.FindClient(model.ClientId);
+            if (string.IsNullOrWhiteSpace(model.Description))
+            {
+                return BadRequest("Description is mandatory");
+            }
+
+            var client = await _clientAccounts.FindClientAsync(model.ClientId, model.ClientName);
             if (client == null)
             {
                 return NotFound("Client could not be found.");
@@ -73,11 +79,6 @@ namespace Lykke.Service.HelpCenter.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetRequest(string id)
         {
-            if (!ModelState.IsValid)
-            {
-                return new BadRequestObjectResult(ModelState);
-            }
-
             var result = await _requests.GetRequest(id);
             if (result == null)
             {
@@ -94,18 +95,13 @@ namespace Lykke.Service.HelpCenter.Controllers
         /// <response code="200">The request details</response>
         /// <response code="400">One or more parameters are invalid</response>
         /// <response code="404">Client could not be found</response>
-        [HttpGet("client/{clientId}")]
+        [HttpGet("clients/{clientId}")]
         [ProducesResponseType(typeof(IEnumerable<RequestModel>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetRequests(string clientId)
         {
-            if (!ModelState.IsValid)
-            {
-                return new BadRequestObjectResult(ModelState);
-            }
-
-            var client = await _clientAccounts.FindClient(clientId);
+            var client = await _clientAccounts.FindClientAsync(clientId);
             if (client == null)
             {
                 return NotFound("Client could not be found.");
@@ -129,12 +125,12 @@ namespace Lykke.Service.HelpCenter.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> AddComment(string id, [FromBody] AddCommentModel model)
         {
-            if (!ModelState.IsValid)
+            if (string.IsNullOrWhiteSpace(model.Comment))
             {
-                return new BadRequestObjectResult(ModelState);
+                return BadRequest("Comment is mandatory");
             }
 
-            var client = await _clientAccounts.FindClient(model.ClientId);
+            var client = await _clientAccounts.FindClientAsync(model.ClientId);
             if (client == null)
             {
                 return NotFound("Client could not be found.");
@@ -163,11 +159,6 @@ namespace Lykke.Service.HelpCenter.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetComments(string id)
         {
-            if (!ModelState.IsValid)
-            {
-                return new BadRequestObjectResult(ModelState);
-            }
-
             var result = await _requests.GetComments(id);
             if (result == null)
             {

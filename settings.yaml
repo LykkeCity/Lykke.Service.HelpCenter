@@ -1,10 +1,14 @@
 HelpCenterService:
     Db:
         LogsConnString:
-            settings-key: HelpCenterService-LogsConnString
+            settings-key: LogsConnString
             types:
                 - AzureBlobStorage
                 - Tag
+        AzureRepositoriesConnString:
+            settings-key: AzureRepositoriesConnString
+            types:
+                - AzureTableStorage
     
     Cache:
         RedisConfiguration:

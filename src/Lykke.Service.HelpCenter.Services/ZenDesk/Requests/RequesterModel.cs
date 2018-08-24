@@ -6,5 +6,8 @@ namespace Lykke.Service.HelpCenter.Services.ZenDesk.Requests
     {
         [JsonProperty("email")]
         public string Email { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
     }
 }

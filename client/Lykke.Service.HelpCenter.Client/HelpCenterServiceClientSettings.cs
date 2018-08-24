@@ -1,14 +1,23 @@
-﻿using Lykke.SettingsReader.Attributes;
-
-namespace Lykke.Service.HelpCenter.Client 
+﻿namespace Lykke.Service.HelpCenter.Client
 {
     /// <summary>
     /// HelpCenter client settings.
     /// </summary>
-    public class HelpCenterServiceClientSettings 
+    public sealed class HelpCenterServiceClientSettings
     {
         /// <summary>Service url.</summary>
-        [HttpCheck("api/isalive")]
-        public string ServiceUrl {get; set;}
+        public string ServiceUrl { get; set; }
+
+        /// <summary>
+        /// Creates client settings based on specified help center url.
+        /// </summary>
+        /// <param name="helpCenterUrl">The help center service url.</param>
+        public static HelpCenterServiceClientSettings Create(string helpCenterUrl)
+        {
+            return new HelpCenterServiceClientSettings
+            {
+                ServiceUrl = helpCenterUrl
+            };
+        }
     }
 }

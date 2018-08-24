@@ -8,10 +8,13 @@ namespace Lykke.Service.HelpCenter.Client.Internal
         {
             Api = httpClientGenerator.Generate<IHelpCenterApi>();
             Requests = httpClientGenerator.Generate<IRequestsApi>();
+            Clients = httpClientGenerator.Generate<ISupportClientsApi>();
         }
 
         public IHelpCenterApi Api { get; }
 
         public IRequestsApi Requests { get; }
+
+        public ISupportClientsApi Clients { get; }
     }
 }

@@ -13,5 +13,8 @@ namespace Lykke.Service.HelpCenter.Client
 
         /// <summary>Requests Api interface</summary>
         IRequestsApi Requests { get; }
+
+        /// <summary>Support clients Api interface</summary>
+        ISupportClientsApi Clients { get; }
     }
 }

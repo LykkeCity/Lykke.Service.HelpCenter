@@ -16,6 +16,11 @@ namespace Lykke.Service.HelpCenter.Client.Models.Requests
         public string ClientId { get; set; }
 
         /// <summary>
+        /// The name of the client. When not provided the first part of the email address will be used as name.
+        /// </summary>
+        public string ClientName { get; set; }
+
+        /// <summary>
         /// The request subject.
         /// </summary>
         [Required]

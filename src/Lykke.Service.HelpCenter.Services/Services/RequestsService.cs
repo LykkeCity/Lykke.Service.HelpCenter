@@ -33,17 +33,18 @@ namespace Lykke.Service.HelpCenter.Services.Services
                 {
                     Subject = subject,
                     Type = type,
-                    Requester = new RequesterModel { Email = client.Email },
+                    Requester = new RequesterModel { Email = client.Email, Name = client.Name },
                     Comment = new CommentModel { Body = description }
                 }
             };
 
             try
             {
-                var result = await _requests.PlaceRequest(client.Email, request);
-                return result.Request.Id;
+                var result = await _requests.TryExecute(_log, x => x.PlaceRequest(client.Email, request));
+
+                return result.Result.Request.Id;
             }
-            catch (Exception ex)
+            catch (ApiException ex)
             {
                 _log.Error(ex);
                 throw;
@@ -73,7 +74,8 @@ namespace Lykke.Service.HelpCenter.Services.Services
         {
             try
             {
-                var result = await _requests.GetRequests(client.Email);
+                var result = await _requests.SearchRequests($"requester:{client.Email} type:ticket");
+
                 return result.Requests;
             }
             catch (ApiException ex)
@@ -85,6 +87,11 @@ namespace Lykke.Service.HelpCenter.Services.Services
 
         public async Task<RequestModel> UpdateRequest(ClientModel client, string id, string comment)
         {
+            if (string.IsNullOrWhiteSpace(client.ZenDeskUserId))
+            {
+                throw new InvalidOperationException("Unknown support client");
+            }
+
             var request = new UpdateRequestModel
             {
                 Request = new UpdateRequestModel.Details
@@ -92,10 +99,11 @@ namespace Lykke.Service.HelpCenter.Services.Services
                     Comment = new CommentModel { Body = comment }
                 }
             };
-            
+
             try
             {
-                var result = await _requests.UpdateRequest(client.Email, id, request);
+                var result = await _requests.UpdateRequest(client.ZenDeskUserId, id, request);
+
                 return result.Request;
             }
             catch (ApiException ex)
@@ -115,6 +123,7 @@ namespace Lykke.Service.HelpCenter.Services.Services
             try
             {
                 var result = await _requests.GetComments(id);
+
                 return result.Comments.Select(x => x.Body);
             }
             catch (ApiException ex)

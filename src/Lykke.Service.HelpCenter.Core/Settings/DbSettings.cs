@@ -6,5 +6,8 @@ namespace Lykke.Service.HelpCenter.Core.Settings
     {
         [AzureTableCheck]
         public string LogsConnString { get; set; }
+
+        [AzureTableCheck]
+        public string AzureRepositoriesConnString { get; set; }
     }
 }

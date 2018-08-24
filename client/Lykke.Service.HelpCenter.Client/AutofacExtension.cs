@@ -29,9 +29,10 @@ namespace Lykke.Service.HelpCenter.Client
             if (settings == null)
                 throw new ArgumentNullException(nameof(settings));
             if (string.IsNullOrWhiteSpace(settings.ServiceUrl))
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(HelpCenterServiceClientSettings.ServiceUrl));
+                throw new ArgumentException("ServiceUrl cannot be null or whitespace.", nameof(settings));
 
-            var clientBuilder = HttpClientGenerator.HttpClientGenerator.BuildForUrl(settings.ServiceUrl)
+            var clientBuilder = HttpClientGenerator.HttpClientGenerator
+                .BuildForUrl(settings.ServiceUrl)
                 .WithAdditionalCallsWrapper(new ExceptionHandlerCallsWrapper());
 
             clientBuilder = builderConfigure?.Invoke(clientBuilder) ?? clientBuilder.WithoutRetries();
@@ -40,5 +41,17 @@ namespace Lykke.Service.HelpCenter.Client
                 .As<IHelpCenterClient>()
                 .SingleInstance();
         }
+
+        /// <summary>
+        /// Registers <see cref="IHelpCenterClient"/> in Autofac container using <see cref="HelpCenterServiceClientSettings"/>.
+        /// </summary>
+        /// <param name="builder">Autofac container builder.</param>
+        /// <param name="helpCenterUrl">HelpCenter service url.</param>
+        /// <param name="builderConfigure">Optional <see cref="HttpClientGeneratorBuilder"/> configure handler.</param>
+        public static void RegisterHelpCenterClient(
+            [NotNull] this ContainerBuilder builder,
+            [NotNull] string helpCenterUrl,
+            [CanBeNull] Func<HttpClientGeneratorBuilder, HttpClientGeneratorBuilder> builderConfigure)
+            => RegisterHelpCenterClient(builder, HelpCenterServiceClientSettings.Create(helpCenterUrl), builderConfigure);
     }
 }

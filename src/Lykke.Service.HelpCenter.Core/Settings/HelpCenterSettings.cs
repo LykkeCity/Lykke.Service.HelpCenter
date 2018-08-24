@@ -8,7 +8,5 @@ namespace Lykke.Service.HelpCenter.Core.Settings
         public DbSettings Db { get; set; }
 
         public ZenDeskSettings ZenDesk { get; set; }
-
-        public CacheSettings Cache { get; set; }
     }
 }

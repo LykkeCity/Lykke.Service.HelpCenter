@@ -20,9 +20,20 @@ namespace Lykke.Service.HelpCenter.Services.Modules
                 .BuildForUrl(_appSettings.CurrentValue.HelpCenterService.ZenDesk.Url)
                 .WithoutCaching()
                 .WithAdditionalDelegatingHandler(new ZenDeskAuthentication(_appSettings.CurrentValue.HelpCenterService.ZenDesk))
+                .WithAdditionalDelegatingHandler(new ZenDeskCaching())
                 .Create();
 
-            builder.Register(x => generator.Generate<IRequestsApi>())
+            builder.RegisterZenDeskClient<IRequestsApi>(generator);
+            builder.RegisterZenDeskClient<IUsersApi>(generator);
+        }
+    }
+
+    internal static class BuilderExtensions
+    {
+        public static void RegisterZenDeskClient<TApi>(this ContainerBuilder builder,
+            HttpClientGenerator.HttpClientGenerator generator)
+        {
+            builder.Register(x => generator.Generate<TApi>())
                 .SingleInstance();
         }
     }

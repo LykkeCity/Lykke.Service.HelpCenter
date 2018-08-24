@@ -7,6 +7,8 @@ namespace Lykke.Service.HelpCenter.Services.ZenDesk
 {
     internal class ZenDeskAuthentication : DelegatingHandler
     {
+        public const string Authorization = @"Authorization";
+
         private readonly string _authHeader;
 
         public ZenDeskAuthentication(ZenDeskSettings settings)

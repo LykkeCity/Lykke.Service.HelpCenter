@@ -1,6 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Lykke.Sdk;
+using Lykke.Service.HelpCenter.AzureRepositories;
 using Lykke.Service.HelpCenter.Core.Settings;
 using Lykke.Service.HelpCenter.Services.Modules;
 using Microsoft.AspNetCore.Builder;
@@ -33,7 +34,8 @@ namespace Lykke.Service.HelpCenter
                 options.RegisterAdditionalModules = x =>
                 {
                     x.RegisterModule<ZenDeskClientsModule>();
-                    x.RegisterModule<ServiceModule>();
+                    x.RegisterModule<ServicesModule>();
+                    x.RegisterModule<AzureDbModule>();
                 };
             });
         }
