@@ -1,31 +1,31 @@
 HelpCenterService:
     Db:
         LogsConnString:
-            settings-key: LogsConnString
+            settings-key: HelpCenter-LogsConnString
             types:
                 - AzureBlobStorage
                 - Tag
         AzureRepositoriesConnString:
-            settings-key: AzureRepositoriesConnString
+            settings-key: HelpCenter-AzureRepositoriesConnString
             types:
                 - AzureTableStorage
     
     Cache:
         RedisConfiguration:
-            settings-key: HelpCenterService-RedisConfiguration
+            settings-key: HelpCenter-RedisConfiguration
             types:
                 - Redis
 
         ClientsCacheInstance:
-            settings-key: HelpCenterService-ClientsCache
+            settings-key: HelpCenter-ClientsCache
         ClientsCacheKeyPattern:
-            settings-key: HelpCenterService-ClientsCacheKeyPattern
+            settings-key: HelpCenter-ClientsCacheKeyPattern
 
     ZenDesk: 
         Url:
-            settings-key: HelpCenterService-ZenDeskUrl
+            settings-key: HelpCenter-ZenDeskUrl
         OAuthToken:
-            settings-key: HelpCenterService-OAuthToken
+            settings-key: HelpCenter-OAuthToken
 
 ClientAccountServiceClient:
     ServiceUrl:
