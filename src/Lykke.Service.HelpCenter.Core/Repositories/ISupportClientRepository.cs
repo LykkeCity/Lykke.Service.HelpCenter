@@ -8,5 +8,7 @@ namespace Lykke.Service.HelpCenter.Core.Repositories
         Task AddAsync(ClientModel model);
 
         Task<ClientModel> GetAsync(string clientId);
+
+        Task DeleteAsync(string clientId);
     }
 }

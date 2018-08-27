@@ -122,7 +122,9 @@ namespace Lykke.Service.HelpCenter.Services.Services
                 return;
             }
 
-            await _users.DeleteUser(client.ZenDeskUserId);
+            await _repository.DeleteAsync(clientId).ConfigureAwait(false);
+
+            await _users.DeleteUser(client.ZenDeskUserId).ConfigureAwait(false);
         }
 
         private static bool NeedsUpdate(UserModel user, ClientAccount.Client.Models.ClientModel client, string name)
