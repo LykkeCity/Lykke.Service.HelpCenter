@@ -124,7 +124,7 @@ namespace Lykke.Service.HelpCenter.Services.Services
                 return new ResponseModel { StatusCode = HttpStatusCode.NotFound };
             }
 
-            var response = await _users.TryExecute(_log, x => x.DeleteUser(client.ZenDeskUserId));
+            var response = await _users.TryExecute(x => x.DeleteUser(client.ZenDeskUserId));
 
             if (response.Success)
             {

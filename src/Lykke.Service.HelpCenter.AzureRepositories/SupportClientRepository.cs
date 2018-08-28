@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AzureStorage;
 using Lykke.Service.HelpCenter.Core.Domain.Clients;
 using Lykke.Service.HelpCenter.Core.Repositories;

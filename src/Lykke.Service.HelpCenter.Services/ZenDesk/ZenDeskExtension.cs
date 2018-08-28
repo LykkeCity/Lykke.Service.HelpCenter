@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
-using Common.Log;
+using JetBrains.Annotations;
 using Lykke.Service.HelpCenter.Core.Domain;
 using Lykke.Service.HelpCenter.Services.ZenDesk.Common;
 using Refit;
 
 namespace Lykke.Service.HelpCenter.Services.ZenDesk
 {
-    [DebuggerStepThrough]
+    [UsedImplicitly]
     public static class ZenDeskExtensions
     {
-        public static async Task<ResponseModel> TryExecute<TApi>(this TApi service, ILog log, Func<TApi, Task> action, Action<ResponseModel> onError = null)
+        public static async Task<ResponseModel> TryExecute<TApi>(this TApi service, Func<TApi, Task> action, Action<ResponseModel> onError = null)
         {
             try
             {
@@ -22,11 +21,11 @@ namespace Lykke.Service.HelpCenter.Services.ZenDesk
             }
             catch (ApiException ex)
             {
-                return ToErrorResponse(ex, new ResponseModel(), onError);
+                return ToErrorResponse(ex, onError);
             }
         }
 
-        public static async Task<ResponseModel<TResult>> TryExecute<TApi,TResult>(this TApi service, ILog log, Func<TApi, Task<TResult>> action, Action<ResponseModel<TResult>> onError = null)
+        public static async Task<ResponseModel<TResult>> TryExecute<TApi,TResult>(this TApi service, Func<TApi, Task<TResult>> action, Action<ResponseModel<TResult>> onError = null)
         {
             try
             {
@@ -40,18 +39,21 @@ namespace Lykke.Service.HelpCenter.Services.ZenDesk
             }
             catch (ApiException ex)
             {
-                return ToErrorResponse(ex, new ResponseModel<TResult>(), onError);
+                return ToErrorResponse(ex, onError);
             }
         }
 
-        private static T ToErrorResponse<T>(ApiException ex, T response, Action<T> onError)
-            where T : ResponseModel
+        private static T ToErrorResponse<T>(ApiException ex, Action<T> onError)
+            where T : ResponseModel, new()
         {
             var error = ex.HasContent
                 ? ex.GetContentAs<ZenDeskError>()
                 : new ZenDeskError { Error = ex.ReasonPhrase };
-            response.StatusCode = ex.StatusCode;
-            response.Error = error.ToString();
+            var response = new T
+            {
+                StatusCode = ex.StatusCode,
+                Error = error.ToString()
+            };
 
             onError?.Invoke(response);
 

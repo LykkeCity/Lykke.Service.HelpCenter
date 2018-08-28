@@ -34,13 +34,13 @@ namespace Lykke.Service.HelpCenter.Services.Services
                     Subject = subject,
                     Type = type,
                     Requester = new RequesterModel { Email = client.Email, Name = client.Name },
-                    Comment = new ZenDeskCommentModel() { Body = description }
+                    Comment = new ZenDeskCommentModel { Body = description }
                 }
             };
 
             try
             {
-                var result = await _requests.TryExecute(_log, x => x.PlaceRequest(client.Email, request));
+                var result = await _requests.TryExecute(x => x.PlaceRequest(client.Email, request));
 
                 return result.Result.Request.Id;
             }

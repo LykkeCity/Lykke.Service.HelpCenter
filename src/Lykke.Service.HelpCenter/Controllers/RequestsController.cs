@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -195,7 +194,7 @@ namespace Lykke.Service.HelpCenter.Controllers
             }
         }
 
-        private RequestModel ToRequestModel(Core.Domain.Requests.RequestModel model)
+        private static RequestModel ToRequestModel(Core.Domain.Requests.RequestModel model)
         {
             return new RequestModel
             {
