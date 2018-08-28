@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -85,7 +86,7 @@ namespace Lykke.Service.HelpCenter.Controllers
                 return NotFound("Request could not be found");
             }
 
-            return Ok(result);
+            return Ok(ToRequestModel(result));
         }
 
         /// <summary>
@@ -108,7 +109,7 @@ namespace Lykke.Service.HelpCenter.Controllers
             }
 
             var result = await _requests.GetRequests(client);
-            return Ok(result);
+            return Ok(result.Select(ToRequestModel));
         }
 
         /// <summary>
@@ -191,6 +192,73 @@ namespace Lykke.Service.HelpCenter.Controllers
                     return Core.Domain.Requests.RequestType.Task;
                 default:
                     return Core.Domain.Requests.RequestType.None;
+            }
+        }
+
+        private RequestModel ToRequestModel(Core.Domain.Requests.RequestModel model)
+        {
+            return new RequestModel
+            {
+                Id = model.Id,
+                Description = model.Description,
+                Subject = model.Subject,
+                Priority = ToPriority(model.Priority),
+                Status = ToStatus(model.Status),
+                Type = ToType(model.Type)
+            };
+        }
+
+        private static RequestPriority? ToPriority(Core.Domain.Requests.RequestPriority? priority)
+        {
+            switch (priority)
+            {
+                case Core.Domain.Requests.RequestPriority.Low:
+                    return RequestPriority.Low;
+                case Core.Domain.Requests.RequestPriority.Normal:
+                    return RequestPriority.Normal;
+                case Core.Domain.Requests.RequestPriority.High:
+                    return RequestPriority.High;
+                case Core.Domain.Requests.RequestPriority.Urgent:
+                    return RequestPriority.Urgent;
+                default:
+                    return null;
+            }
+        }
+        private static RequestStatus ToStatus(Core.Domain.Requests.RequestStatus status)
+        {
+            switch (status)
+            {
+                case Core.Domain.Requests.RequestStatus.New:
+                    return RequestStatus.New;
+                case Core.Domain.Requests.RequestStatus.Open:
+                    return RequestStatus.Open;
+                case Core.Domain.Requests.RequestStatus.Pending:
+                    return RequestStatus.Pending;
+                case Core.Domain.Requests.RequestStatus.Hold:
+                    return RequestStatus.Hold;
+                case Core.Domain.Requests.RequestStatus.Solved:
+                    return RequestStatus.Solved;
+                case Core.Domain.Requests.RequestStatus.Closed:
+                    return RequestStatus.Closed;
+                default:
+                    return RequestStatus.Open;
+            }
+        }
+
+        private static RequestType? ToType(Core.Domain.Requests.RequestType? type)
+        {
+            switch (type)
+            {
+                case Core.Domain.Requests.RequestType.Question:
+                    return RequestType.Question;
+                case Core.Domain.Requests.RequestType.Incident:
+                    return RequestType.Incident;
+                case Core.Domain.Requests.RequestType.Problem:
+                    return RequestType.Problem;
+                case Core.Domain.Requests.RequestType.Task:
+                    return RequestType.Task;
+                default:
+                    return null;
             }
         }
     }
