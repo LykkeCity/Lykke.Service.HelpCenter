@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Common.Log;
 using Lykke.Common.Log;
 using Lykke.Service.ClientAccount.Client;
+using Lykke.Service.HelpCenter.Core.Domain;
 using Lykke.Service.HelpCenter.Core.Domain.Clients;
 using Lykke.Service.HelpCenter.Core.Repositories;
 using Lykke.Service.HelpCenter.Core.Services;
@@ -113,18 +115,23 @@ namespace Lykke.Service.HelpCenter.Services.Services
             }
         }
 
-        public async Task DeleteUser(string clientId)
+        public async Task<ResponseModel> DeleteUser(string clientId)
         {
             var client = await FindClientAsync(clientId);
 
             if (client == null)
             {
-                return;
+                return new ResponseModel { StatusCode = HttpStatusCode.NotFound };
             }
 
-            await _repository.DeleteAsync(clientId).ConfigureAwait(false);
+            var response = await _users.TryExecute(_log, x => x.DeleteUser(client.ZenDeskUserId));
 
-            await _users.DeleteUser(client.ZenDeskUserId).ConfigureAwait(false);
+            if (response.Success)
+            {
+                await _repository.DeleteAsync(clientId).ConfigureAwait(false);
+            }
+
+            return response;
         }
 
         private static bool NeedsUpdate(UserModel user, ClientAccount.Client.Models.ClientModel client, string name)

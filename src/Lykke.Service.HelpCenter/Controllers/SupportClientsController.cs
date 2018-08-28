@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using Lykke.Service.HelpCenter.Client.Models.Clients;
+using Lykke.Service.HelpCenter.Client.Models.Common;
 using Lykke.Service.HelpCenter.Core.Domain.Clients;
 using Lykke.Service.HelpCenter.Core.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -80,17 +81,17 @@ namespace Lykke.Service.HelpCenter.Controllers
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <response code="200">Client was deleted</response>
-        /// <response code="403">Client has open support tickets and can't be deleted</response>
+        /// <response code="422">Client could not be deleted</response>
         /// <response code="404">Lykke client could not be found</response>
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType((int)HttpStatusCode.Forbidden)]
+        [ProducesResponseType(typeof(ErrorModel), (int)HttpStatusCode.UnprocessableEntity)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            await _supportClientService.DeleteUser(id);
+            var response = await _supportClientService.DeleteUser(id);
 
-            return Ok();
+            return response.ToActionResult();
         }
 
         private static SupportClientModel ToSupportClientModel(ClientModel user)

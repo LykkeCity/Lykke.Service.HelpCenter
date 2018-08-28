@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 using Common.Log;
@@ -8,9 +9,10 @@ using Refit;
 
 namespace Lykke.Service.HelpCenter.Services.ZenDesk
 {
+    [DebuggerStepThrough]
     public static class ZenDeskExtensions
     {
-        public static async Task<ResponseModel> TryExecute<TApi>(this TApi service, ILog log, Func<TApi, Task> action)
+        public static async Task<ResponseModel> TryExecute<TApi>(this TApi service, ILog log, Func<TApi, Task> action, Action<ResponseModel> onError = null)
         {
             try
             {
@@ -20,11 +22,11 @@ namespace Lykke.Service.HelpCenter.Services.ZenDesk
             }
             catch (ApiException ex)
             {
-                return ToErrorResponse(ex, new ResponseModel());
+                return ToErrorResponse(ex, new ResponseModel(), onError);
             }
         }
 
-        public static async Task<ResponseModel<TResult>> TryExecute<TApi,TResult>(this TApi service, ILog log, Func<TApi, Task<TResult>> action)
+        public static async Task<ResponseModel<TResult>> TryExecute<TApi,TResult>(this TApi service, ILog log, Func<TApi, Task<TResult>> action, Action<ResponseModel<TResult>> onError = null)
         {
             try
             {
@@ -38,18 +40,20 @@ namespace Lykke.Service.HelpCenter.Services.ZenDesk
             }
             catch (ApiException ex)
             {
-                return ToErrorResponse(ex, new ResponseModel<TResult>());
+                return ToErrorResponse(ex, new ResponseModel<TResult>(), onError);
             }
         }
 
-        private static T ToErrorResponse<T>(ApiException ex, T response)
+        private static T ToErrorResponse<T>(ApiException ex, T response, Action<T> onError)
             where T : ResponseModel
         {
             var error = ex.HasContent
                 ? ex.GetContentAs<ZenDeskError>()
                 : new ZenDeskError { Error = ex.ReasonPhrase };
             response.StatusCode = ex.StatusCode;
-            response.Error = error.Error;
+            response.Error = error.ToString();
+
+            onError?.Invoke(response);
 
             return response;
         }
